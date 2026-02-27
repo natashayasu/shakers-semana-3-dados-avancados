@@ -1,4 +1,14 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 .swiper {
-  width: 600px;
-  height: 300px;
+  width: 700px;
+  height: 470px;
+}
+
+.banner-img {
+  width: 100%;
 }
