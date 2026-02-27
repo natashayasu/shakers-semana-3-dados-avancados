@@ -6,19 +6,56 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
 
 {{ 'metaobject-slider.css' | asset_url | stylesheet_tag }}
-{{ 'metaobject-slider.js' | asset_url |  script_tag }}
+{{ 'metaobject-slider.js' | asset_url | script_tag }}
 
-<div class="swiper">
+{% assign product_handle = section.settings.product %}
+{% assign product = all_products[product_handle] %}  
 
-  <div class="swiper-wrapper">
-    <div class="swiper-slide">Slide 1</div>
-    <div class="swiper-slide">Slide 2</div>
-    <div class="swiper-slide">Slide 3</div>
-  </div>
-  <div class="swiper-pagination"></div>
+{% if product %}
+  {% assign metaobjects = product.metafields.custom.related_products_with_banner.value %}
 
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-button-next"></div>
+  {% if metaobjects %}
+    
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        {% for item in metaobjects %}
+          {% assign related_product = all_products[item.product.handle] %}
+          <div class="swiper-slide">
+            <div class="slide-card">
+              {% if item.banner %}
+                <img src="{{ item.banner | image_url }}" alt="{{ item.banner.alt }}" class="banner-img">
+              {% endif %}
+              {% if related_product != blank %}
+                <a href="{{ related_product.url }}">
+                  <img src="{{ related_product.featured_image | image_url }}" alt="{{ related_product.featured_image.alt }}">
+                  <h3>{{ related_product.title }}</h3>
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+  {% endif %}
+{% endif %}
 
-  <div class="swiper-scrollbar"></div>
-</div>
+{% schema %}
+{
+  "name": "Metaobject Slider",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Selecionar Produto"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Metaobject Slider"
+    }
+  ]
+}
+{% endschema %}
