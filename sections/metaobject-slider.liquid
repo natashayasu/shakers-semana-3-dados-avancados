@@ -8,39 +8,40 @@
 {{ 'metaobject-slider.css' | asset_url | stylesheet_tag }}
 {{ 'metaobject-slider.js' | asset_url | script_tag }}
 
-{% assign product_handle = section.settings.product %}
-{% assign product = all_products[product_handle] %}  
+<main>
+  {% assign product_handle = section.settings.product %}
+  {% assign product = all_products[product_handle] %}  
 
-{% if product %}
-  {% assign metaobjects = product.metafields.custom.related_products_with_banner.value %}
+  {% if product != blank %}
+    {% assign metaobjects = product.metafields.custom.related_products_with_banner.value %}
 
-  {% if metaobjects %}
-    
-    <div class="swiper">
-      <div class="swiper-wrapper">
-        {% for item in metaobjects %}
-          {% assign related_product = all_products[item.product.handle] %}
-          <div class="swiper-slide">
-            <div class="slide-card">
-              {% if item.banner %}
-                <img src="{{ item.banner | image_url }}" alt="{{ item.banner.alt }}" class="banner-img">
-              {% endif %}
-              {% if related_product != blank %}
-                <a href="{{ related_product.url }}">
-                  <img src="{{ related_product.featured_image | image_url }}" alt="{{ related_product.featured_image.alt }}">
+    {% if metaobjects != blank %}
+      
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          {% for item in metaobjects %}
+            {% assign related_product = all_products[item.product.value.handle] %}
+            <div class="swiper-slide">
+              <div class="slide-card">
+                {% if item.banner != blank %}
+                  <img src="{{ item.banner | image_url }}" alt="{{ item.banner.alt }}" class="banner-img">
+                {% endif %}
+                {% if related_product != blank %}
+                  <img src="{{ related_product.featured_image | image_url }}" alt="{{ related_product.featured_image.alt }}" class="product-img">
                   <h3>{{ related_product.title }}</h3>
-                </a>
-              {% endif %}
+                  <a href="{{ related_product.url }}" class="product-button">Ver produto</a>
+                {% endif %}
+              </div>
             </div>
-          </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
       </div>
-      <div class="swiper-pagination"></div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
-    </div>
+    {% endif %}
   {% endif %}
-{% endif %}
+</main>
 
 {% schema %}
 {
