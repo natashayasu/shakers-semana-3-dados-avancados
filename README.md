@@ -140,7 +140,7 @@ Certifique-se de que:
 
 Link do Pull Request:
 
-👉 
+👉 https://github.com/natashayasu/shakers-semana-3-dados-avancados/pull/1
 
 ---
 
